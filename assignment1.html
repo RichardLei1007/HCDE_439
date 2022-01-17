@@ -4,7 +4,7 @@
         <meta charset="utf-8"> 
         <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-        <title>Example Student's HCDE 439 Physical Computing Page!</title> 
+        <title>Richard's HCDE 439 Assignment 1 Page!</title> 
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
@@ -12,13 +12,87 @@
     <body> 
 
         <div class="header">
-            <h1>Example Student's Assignment 1!</h1>
+            <h1>Richard's Assignment 1!</h1>
             <p>
-            <img src="red-panda.jpg" width=400></a>
+                <img src="A1Blink.gif" width=400></a>
             </p>
             <p>
-            Here is all the documentation for assignment 1!
+                Here is all the documentation for assignment 1!
             </p>
+            <p>
+                <img src="A1_Schematic.png" width="400"></a>
+            </p>
+            <p>
+                5V power, 1.8V LEDs, 20mA recommended current, 220Ω resistors.
+            </p>
+            <p>
+                <img src="A1_Circuit.jpg" width="400"></a>
+            </p>
+            <p>
+                Breadboard setup.
+            </p>
+            <br>
+            <p>
+                Code for this LED blinking pattern.
+            </p>
+            <pre class="code_block">
+                <code class="lines">
+// Set each LED as an integer
+int red = 1;
+int green = 2;
+int blue = 3;
+int yellow = 4;
+
+// Set up each LED with their relative pin
+void setup() {
+  pinMode(red, OUTPUT);
+  pinMode(green, OUTPUT);
+  pinMode(blue, OUTPUT);
+  pinMode(yellow, OUTPUT);
+}
+
+// Codes for making the LED blink on a loop
+void loop() {
+  // Loop that cycles through each LED from Red -&gt; Green -&gt; Blue -&gt; Yellow and making them each blink on and off once
+  for (int i = 1; i &lt;= 4; i ++) {
+    digitalWrite(i, HIGH);          // Turn on current LED
+    delay(200);                     // Wait 200 ms
+    digitalWrite(i, LOW);           // Turn off current LED
+    delay(0);                       // *No delay but kept line to play around with timer
+  }
+
+  // Turn on Red LED once after cycle to transition into next loop
+  digitalWrite(red, HIGH);          // Turn on Red LED
+  delay(200);                       // Wait 200 ms
+  digitalWrite(red, LOW);           // Turn off Red LED
+
+  // Loop that cycles through each LED from Yellow -&gt; Blue -&gt; Green -&gt; Red and making them each blink on and off once
+  for (int i = 4; i &gt;= 1; i --) {
+    digitalWrite(i, HIGH);          // Turn on current LED
+    delay(200);                     // Wait 200 ms
+    digitalWrite(i, LOW);           // Turn off current LED
+    delay(0);                       // **No delay but kept line to play around with timer
+  }
+
+  // Loop that cycles through duo LEDs and turning them on and off for 2 rotations (Yellow + Blue) &amp; (Red + Green)
+  for (int i = 1; i &lt;= 2; i ++) {
+    digitalWrite(yellow, HIGH);     // Turn on Yellow LED
+    digitalWrite(blue, HIGH);       // Turn on Blue LED
+    delay(200);                     // Wait 200 ms
+    digitalWrite(yellow, LOW);      // Turn off Yellow LED
+    digitalWrite(blue, LOW);        // Turn off Blue LED
+    delay(200);                     // Wait 200 ms
+  
+    digitalWrite(red, HIGH);        // Turn on Red LED
+    digitalWrite(green, HIGH);      // Turn on Green LED
+    delay(200);                     // Wait 200 ms
+    digitalWrite(red, LOW);         // Turn off Red LED
+    digitalWrite(green, LOW);       // Turn off Green LED
+    delay(200);                     // Wait 200 ms
+  }
+}
+                </code>
+             </pre>
         </div>
         
     </body>
