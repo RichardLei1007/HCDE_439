@@ -30,7 +30,7 @@ void loop() {
   // Loop that cycles through each LED from Yellow -> Blue -> Green -> Red and making them each blink on and off once
   for (int i = 4; i >= 1; i --) {
     digitalWrite(i, HIGH);          // Turn on current LED
-    delay(200);                     // Wiat 200 ms
+    delay(200);                     // Wait 200 ms
     digitalWrite(i, LOW);           // Turn off current LED
     delay(0);                       // **No delay but kept line to play around with timer
   }
