@@ -26,14 +26,15 @@ a {
   }
 
 .assignment {
+  position: relative;
   font-size: 12px;
   line-height: 24px;
   font-family: 'helvetica', 'arial', 'sans';
-  padding: 20px 20px 20px 30px;
-  width: 250px;
-  height: 350px;
-  overflow: hidden;
+  padding: 20px 20px 20px 20px;
+  width: 400px;
+  height: 600px;
   float: left;
+  overflow: hidden;
 }
 
 .assignment:hover { overflow:auto }
