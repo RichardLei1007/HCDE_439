@@ -17,22 +17,17 @@
                 <img src="A4.gif" width=400></a>
             </p>
             <p>
-                NOTE: Sorry about the gif brightness...I should have set the intensity to 100 instead of 255 as max. <br> <br>
                 Here is all the documentation for assignment 4!
                 <br> <br>
-                I could not find the symbol for a joystick on KiCad so I imported an image. The wires don't exactly match up because of the spacing. <br>
-                VRy is connected to A1 <br>
-                VRx is connected to A0 <br>
-                +5V is connected to power (+5V) <br>
-                GND is connected to ground <br>
             </p>
             <p>
                 <img src="A4_schematic.png" width="800"></a>
             </p>
             <p>
-                This set up uses the servo library to create a functional RGB LED colour changer through a joystick. Using the joystick analog readings, I mapped 
-                the x and y axis readings to blue and red, while keeping green at zero to avoid potential blindness. Users can play with the joystick to mix and match 
-                blue and red, creating purple or pink hues. <br> <br>
+                This set up uses the IR remote library to allow the user to mix and match colours through a remote and RGB LED. 
+                By pressing the buttons, users can increase or decrease the intensity of each colour, allowing for custom hues and 
+                more. Buttons 1 and 4 are used to control red, buttons 2 and 5 are used for green, and buttons 3 and 6 are for blue. 
+                The IR remote library does not need calibration from the inputs as it ends distinct signals <br> <br>
                 The set up also uses a RGB LED so naturally it requires 3 resistors to keep the current in check. <br> <br>
                 R = V / I <br>
                 R = (5 - 1.8) / 0.02 = 160 (Green and Red LEDs) <br>
@@ -53,48 +48,104 @@
             </p>
             <pre class="code_block">
                 <code class="lines">
-int xValue;         // Servo x axis output
-int yValue;         // Servo y axis output
-#include <Servo.h>        // Servo library
-Servo myServo;            // Servo name
+#include <IRremote.h>           // IR remote library
 
-int red = 11;       // RGB led red
-int green = 10;     // RGB led green (set as constant atm but can change if needed)
-int blue = 9;       // RGB led blue
-const int greenVal = 0;       // See above
+const int inputPin = 7;         // Set receiver pin
+IRrecv irrecv(inputPin);        // IR receiver
+decode_results results;         // Decoded result variable
 
-// Initiate serial, initiate pin outputs
-void setup() {
+const int red = 6;          // RGB LED red leg
+const int green = 5;        // RGB LED green leg
+const int blue = 9;         // RGB LED blue leg
+
+int redVal = 0;           // red intensity
+int greenVal = 0;         // green intensity
+int blueVal = 0;          // blue intensity
+
+// Initializes needed components, IR components + LED outputs
+void setup(){
   Serial.begin(9600);
-  for (int i = 9; i &lt; 13; i++) {
-    pinMode(i, OUTPUT);
-  }
+  irrecv.enableIRIn();
+  irrecv.blink13(true);
+  pinMode(red, OUTPUT);
+  pinMode(green, OUTPUT);
+  pinMode(blue, OUTPUT);
 }
 
+// Pressing buttons on the remote changes the RGB LED hues. Button 1 and 4 controls red intensity. Button 2 and 5 controls
+// green intensity. Button 3 and 6 controls blue intensity.
+void loop(){
 
-// Stores the readings from the joystick, trims them, and maps them to the colour values.
-// Y axis value controls red sensitivity. X axis value controls blue sensitivity. Green is 0.
-// Moving the joystick updates the RGB led and makes different colour combinations.
-void loop() {
-  xValue = analogRead(A0);      // Reads joystick X axis output and stores it
-  yValue = analogRead(A1);      // Reads joystick Y axis output and stores it
-  
-  xValue = constrain(xValue, 0, 1000);        // Trims x axis reading
-  yValue = constrain(yValue, 0, 1000);        // Trims y axis reading
-  
-  int redVal = map(yValue, 0, 1000, 0, 255);      // Maps yValue to red sensitivity
-  int blueVal = map(xValue, 0, 1000, 0, 255);     // Maps xValye to blye sensitivity
-  
-  analogWrite(blue, blueVal);     // LED blue
-  analogWrite(red, redVal);       // LED red
-  analogWrite(green, greenVal);   // LED green (is 0 atm)
-  
-  // Used for checking joystick outputs.
-  Serial.print("X= ");
-  Serial.print(xValue);
-  Serial.print("\t Y= ");
-  Serial.println(yValue);
-  delay(10);
+  // Makes sure the value of the intensity never goes outside of the intended range (0-255)
+  if (redVal &lt; 0) {
+    redVal = 0;
+  }
+  if (redVal > 255) {
+    redVal = 255;
+  }
+  if (blueVal &lt; 0) {
+    blueVal = 0;
+  }
+  if (blueVal > 255) {
+    blueVal = 255;
+  }
+  if (greenVal &lt; 0) {
+    greenVal = 0;
+  }
+  if (greenVal > 255) {
+    greenVal = 255;
+  }
+
+  // If the input is a valid result that matches one of the cases, add or subtract from the matching colour intensity
+  if (irrecv.decode(&results)){
+
+    switch (results.value) {
+      case 0xFF30CF:        // button 1
+      redVal += 10;
+      Serial.print("red: ");        // Used to check output value
+      Serial.println(redVal);
+    }
+
+    switch (results.value) {
+      case 0xFF18E7:        // button 2
+      greenVal += 10;
+      Serial.print("green: ");        // Used to check output value
+      Serial.println(greenVal);
+    }
+
+    switch (results.value) {
+      case 0xFF7A85:        // button 3
+      blueVal += 10;
+      Serial.print("blue: ");        // Used to check output value
+      Serial.println(blueVal);
+    }
+
+    switch (results.value) {
+      case 0xFF10EF:        // button 4
+      redVal -= 10;
+      Serial.print("red: ");        // Used to check output value
+      Serial.println(redVal);
+    }
+
+    switch (results.value) {
+      case 0xFF38C7:        // button 5
+      greenVal -= 10;
+      Serial.print("green: ");        // Used to check output value
+      Serial.println(greenVal);
+    }
+
+    switch (results.value) {
+      case 0xFF5AA5:        // button 6
+      blueVal -= 10;
+      Serial.print("blue: ");        // Used to check output value
+      Serial.println(blueVal);
+    }
+    
+    irrecv.resume();          // resumes remote / prevents spam
+  }
+  analogWrite(red, redVal);           //Display current red intensity
+  analogWrite(green, greenVal);       //Display current green intensity
+  analogWrite(blue, blueVal);         //Display current blue intensity
 }
                 </code>
              </pre>
