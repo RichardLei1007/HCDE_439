@@ -27,6 +27,16 @@
               Couldn't find the symbol for LED strips in KiCad so I just used a series LED for replacement. Hope its ok.
               <br>
               <br>
+              <img src="voltage.png" width="600"></a>
+              <br> <br>
+              This is a current vs voltage per LED graph I found that details the scenario happening within standard LED strips.
+              <br> <br>
+              The 12V LED strip has 3 LEDs and a resistor in series per parallel line. Each component draws about 3V of power totalling to 
+              12V. If less voltage is applied, which it normally is due to many reasons (12V might become 11.9V, etc.), then the current 
+              on each LED will lower from roughly 120mA to 100mA or lower. While voltage is shared between all parallel LED series, the total 
+              current is not. The TO-220 transistor has a maximum current threshold of 75A (according to Google). The LED strip I will be 
+              using has 20 segments, which totals to 20 x 120mA = 2400mA = 2.4A. This is well within the acceptable range of TO-220's current 
+              limit. <br> <br>
               This set up uses the IR remote library to allow the user to turn on and off, and brighten and dim a LED strip. Since the LED 
               strip has built in resistors for the LEDs, no external resistor is needed. The LED strip uses a 12V power source while the IR 
               receiver only uses 5V. The transistor is being controlled by pin 9 which determines the output value for the 12V source. 
