@@ -39,6 +39,12 @@
               I wanted the colours of the lamps to be controllable, so I built an interface using p5.js so users can play around with the 
               settings. The p5 side will take the user input (mouse movement and hitting the ENTER key) and send the Arduino side a value, 
               which tells Arduino which lamp and which colour requires updating. <br> <br>
+              Technical Writeup: <br>
+              To set up the project, both segments of the code (which can be found below) are required. P5 code needs to be set up in an 
+              editing software such as VS code, and its corresponding index.html file needs to be hosted locally so users can use the interface. 
+              The Arduino code needs to be uploaded to the Arduino and ran at least once. Afterwards, users need to open the p5 Serial control 
+              software and open the Arduino serial port. Keep note of the path name and copy that into the serial.open function in the p5 file, 
+              making sure the number and modem name is consistent. Then, open the index.html page for p5 and the lamp is good to go. <br> <br>
               I used two RGB LEDs, a Photoresister, six 220 ohms resistors, one 10k ohms resistor, and some female and male wires.
               For the structure of the LED lamp, I laser cut 3mm thick birch boards into the needed sides to form the base box and 
               used living hinges to create the lamp shades. I also cut patterns onto the lamp shade so the LEDs can print a pattern 
